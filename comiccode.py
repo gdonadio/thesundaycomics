@@ -96,7 +96,7 @@ def comicpullgo():
 			s = match.end()
 			if page[s:s+31]=="https://assets.amuniversal.com/":   #example http://bit.ly/1KPuqPb
 				print 'Found "%s" at %d:%d' % (page[s:s+63], s, s+63)
-				comicstrip.update({name: page[s:s+62]})
+				comicstrip.update({name: page[s:s+63]})
 				print 'Added %s' % name
 			else:
 				print 'No GoComics this week :( %s' % page[s:s+31]
