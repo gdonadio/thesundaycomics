@@ -3,13 +3,11 @@
 # comiccode.py runs the comic code that uploades the html code to Heroku's postgresql server. 
 # comiccode.py is run 4AM every day and uploads the images from the last Sunday.
 
+import re
+import glob
 import os
 from flask import Flask 
 app = Flask(__name__)
-
-import re
-import urllib2
-import glob
 
 
 from datetime import date
