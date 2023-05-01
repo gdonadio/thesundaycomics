@@ -32,7 +32,6 @@ comiclistgo = {
 "BABY BLUES by Rick Kirkman and Jerry Scott": "http://www.gocomics.com/babyblues/",
 "MOTHER GOOSE & GRIMM by Mike Peters": "http://www.gocomics.com/mother-goose-and-grimm/",
 "CRANKSHAFT by Tom Batiuk and Chuck Ayers": "http://www.gocomics.com/crankshaft/",
-
 #"CATHY by Cathy Guisewite": "http://www.gocomics.com/cathy/" #Cathy is too lame
 }
 
@@ -99,4 +98,5 @@ adddatesking()
 adddatesgo()
 comicpullgo()
 comicpullking()
-htmlcode()
+with open("index.html", "w") as file:
+    file.write(htmlcode())
