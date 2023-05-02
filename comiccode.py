@@ -1,4 +1,8 @@
 import requests
+import os
+import urllib.parse as up
+import psycopg2
+
 
 from datetime import date
 today = date.today().toordinal()
@@ -54,7 +58,7 @@ comiclistking = {
 def adddatesking():
     for name, address in comiclistking.items():
         comiclistking[name] += kingdate
-        
+
 def adddatesgo():
     for name, address in comiclistgo.items():
         comiclistgo[name] += godate
@@ -67,10 +71,10 @@ def comicpullking():
         if page.find(patternking)>0:
             comicstrip.update({name: page.split(patternking)[1].split('"')[0]})
             print('Found and added %s' % name)
-        
+
         else:
             print('ComicsKingdom: Did not add %s' % name)
-            
+
 def comicpullgo():
     for name, link in comiclistgo.items():
         headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
@@ -79,10 +83,10 @@ def comicpullgo():
         if page.find(patterngo)>0:
             comicstrip.update({name: page.split(patterngo)[1].split('"')[0]})
             print('Found and added %s' % name)
-        
+
         else:
             print('GoComics: Did not add %s' % name)
-            
+
 def htmlcode():
     thecode = '<html><title>The Sunday Comics</title><body><style type="text/css"> .container {width: 600px; margin: 0 auto;} </style><div class="container"><h1>The Sunday Comics</h1>'     
     for name, path in comicstrip.items():
@@ -92,11 +96,22 @@ def htmlcode():
             thecode = thecode + '<p>' + name +'</p>' + '<img src="' + path + '" width="600">'
     thecode = thecode + '</div></body></html>'
     return thecode
-    
-   
+
+def uploadsql():
+        up.uses_netloc.append("postgres")
+        url = up.urlparse(os.environ["DATABASE_URL"])
+        conn = psycopg2.connect(database=url.path[1:],
+                            user=url.username,
+                            password=url.password,
+                            host=url.hostname,
+                            port=url.port
+                     )
+        cursor = conn.cursor()
+        cursor.execute("insert into comicDB VALUES (%s, %s)", (kingdate , htmlcode() ) )
+
+
 adddatesking()
 adddatesgo()
 comicpullgo()
 comicpullking()
-with open("index.html", "w") as file:
-    file.write(htmlcode())
+uploadsql()
