@@ -28,10 +28,11 @@ conn = psycopg2.connect(database=url.path[1:],
 cursor = conn.cursor()
 cursor.execute("select distinct a.code from comicDB a where a.date = '{}'".format(kingdate) )
 htmlcode = cursor.fetchall()
+cursor.close()
 
 @app.route("/")
 def showpage():
     return htmlcode[0][0]
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run()
