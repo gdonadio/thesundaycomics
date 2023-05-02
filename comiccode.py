@@ -88,7 +88,7 @@ def comicpullgo():
             print('GoComics: Did not add %s' % name)
 
 def htmlcode():
-    thecode = '<html><title>The Sunday Comics</title><body><style type="text/css"> .container {width: 600px; margin: 0 auto;} </style><div class="container"><h1>The Sunday Comics</h1>'     
+    thecode = '<html><title>The Sunday Comics</title><body><style type="text/css"> .container {width: 600px; margin: 0 auto;} </style><div class="container"><h1>The Sunday Comics</h1>'
     for name, path in comicstrip.items():
         if name=='NON SEQUITUR by Wiley Miller':
             thecode = thecode + '<p>' + name +'</p>' + '<img src="' + path + '" width="400">'
@@ -107,11 +107,13 @@ def uploadsql():
                             port=url.port
                      )
         cursor = conn.cursor()
-        cursor.execute("insert into comicDB VALUES (%s, %s)", (kingdate , htmlcode() ) )
-
+        cursor.execute('''insert into comicDB VALUES ('%s', '%s')''' % (kingdate, htmlcode()))
+        conn.commit()
+        cursor.close()
 
 adddatesking()
 adddatesgo()
 comicpullgo()
 comicpullking()
 uploadsql()
+
