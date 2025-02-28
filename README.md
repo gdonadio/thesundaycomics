@@ -1,5 +1,5 @@
 <h1> thesundaycomics </h1>
-<a href="http://thesundaycomics.herokuapp.com">thesundaycomics.herokuapp.com</a>
+<a href="https://thesundaycomics.onrender.com">thesundaycomics.onrender.com</a>
 
 <h2>Synopsis</h2>
 This project collects last Sunday's comic strips across the internet and places them on one webpage. The goal was to create an output that looks like the Sunday Comics page you'd find in a newspaper. I used Python to scrape to images from a list of webpages, place all the locations into .html code with a loop and then throw last Sunday's webpage online.
