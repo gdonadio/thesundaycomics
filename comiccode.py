@@ -53,6 +53,7 @@ comiclistking = {
 "PRINCE VALIANT by Mark Schultz and Thomas Yeates": "http://comicskingdom.com/prince-valiant/",
 "MUTTS by Patrick McDonnell": "http://comicskingdom.com/mutts/",
 "MARY WORTH by Karen Moy and Joe Giella": "http://comicskingdom.com/mary-worth/",
+"CURTIS by Ray Billingsley": "http://comicskingdom.com/curtis/",
 }
 
 def adddatesking():
