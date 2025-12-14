@@ -3,6 +3,9 @@ import os
 import urllib.parse as up
 import psycopg2
 
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import NoSuchElementException
 
 from datetime import date
 today = date.today().toordinal()
@@ -53,7 +56,6 @@ comiclistking = {
 "PRINCE VALIANT by Mark Schultz and Thomas Yeates": "http://comicskingdom.com/prince-valiant/",
 "MUTTS by Patrick McDonnell": "http://comicskingdom.com/mutts/",
 "MARY WORTH by Karen Moy and Joe Giella": "http://comicskingdom.com/mary-worth/",
-"CURTIS by Ray Billingsley": "http://comicskingdom.com/curtis/",
 }
 
 def adddatesking():
@@ -77,16 +79,25 @@ def comicpullking():
             print('ComicsKingdom: Did not add %s' % name)
 
 def comicpullgo():
+    options = Options()
+    options.add_argument("--headless=new")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+
+    driver = webdriver.Chrome(options=options)
+
     for name, link in comiclistgo.items():
-        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-        page = requests.get(link, headers=headers).content.decode()
-
-        if page.find(patterngo)>0:
-            comicstrip.update({name: page.split(patterngo)[1].split('"')[0]})
+        try:
+            driver.get(link)
+            meta_tag = driver.find_element("css selector", 'meta[name="twitter:image"]')
+            image_url = meta_tag.get_attribute("content")
+            comicstrip.update({name: image_url})
             print('Found and added %s' % name)
-
-        else:
+        except NoSuchElementException:
             print('GoComics: Did not add %s' % name)
+
+    driver.quit()
 
 def htmlcode():
     thecode = '<html><title>The Sunday Comics</title><body><style type="text/css"> .container {width: 600px; margin: 0 auto;} </style><div class="container"><h1>The Sunday Comics</h1>'
@@ -98,23 +109,16 @@ def htmlcode():
     thecode = thecode + '</div></body></html>'
     return thecode
 
-def uploadsql():
-        up.uses_netloc.append("postgres")
-        url = up.urlparse(os.environ["DATABASE_URL"])
-        conn = psycopg2.connect(database=url.path[1:],
-                            user=url.username,
-                            password=url.password,
-                            host=url.hostname,
-                            port=url.port
-                     )
-        cursor = conn.cursor()
-        cursor.execute('''insert into comicDB VALUES ('%s', '%s')''' % (kingdate, htmlcode()))
-        conn.commit()
-        cursor.close()
+def savehtmlfile():
+    output_dir = "output"
+    os.makedirs(output_dir, exist_ok=True)
+    filepath = os.path.join(output_dir, "thesundaycomics.html")
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(htmlcode())
+    print(f"Saved HTML to {filepath}")
 
 adddatesking()
 adddatesgo()
 comicpullgo()
 comicpullking()
-uploadsql()
-
+savehtmlfile()
