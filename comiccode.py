@@ -112,7 +112,7 @@ def htmlcode():
 def savehtmlfile():
     output_dir = "output"
     os.makedirs(output_dir, exist_ok=True)
-    filepath = os.path.join(output_dir, "thesundaycomics.html")
+    filepath = os.path.join(output_dir, "index.html")
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(htmlcode())
     print(f"Saved HTML to {filepath}")
