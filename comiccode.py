@@ -1,13 +1,12 @@
 import requests
 import os
-import urllib.parse as up
-import psycopg2
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
 
 from datetime import date
+
 today = date.today().toordinal()
 prevsunday = today - (today % 7)
 sundaydate = date.fromordinal(prevsunday)
@@ -100,7 +99,9 @@ def comicpullgo():
     driver.quit()
 
 def htmlcode():
-    thecode = '<html><title>The Sunday Comics</title><body><style type="text/css"> .container {width: 600px; margin: 0 auto;} </style><div class="container"><h1>The Sunday Comics</h1>'
+    thecode = '<html><head><meta charset="utf-8"><title>The Sunday Comics</title></head><body>'
+    thecode += '<style type="text/css"> .container {width: 600px; margin: 0 auto;} </style>'
+    thecode += '<div class="container"><h1>The Sunday Comics</h1>'
     for name, path in comicstrip.items():
         if name=='NON SEQUITUR by Wiley Miller':
             thecode = thecode + '<p>' + name +'</p>' + '<img src="' + path + '" width="400">'
