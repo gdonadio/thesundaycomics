@@ -2,7 +2,7 @@ name: Update Sunday Comics
 
 on:
   schedule:
-    - cron: '0 8 * * 0'  # Every Sunday at 8:00 AM UTC
+    - cron: '0 10 * * 0'  # Every Sunday at 10:00 AM UTC (5:00 AM Eastern)
   workflow_dispatch:     # Allow manual triggering from GitHub
 
 jobs:
